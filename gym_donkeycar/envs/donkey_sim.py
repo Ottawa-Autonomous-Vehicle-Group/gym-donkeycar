@@ -146,8 +146,7 @@ class DonkeyUnitySimHandler(IMesgHandler):
         observation = self.image_array
         done = self.is_game_over()
         reward = self.calc_reward(done)
-        info = {'pos': (self.x, self.y, self.z), 'cte': self.cte,
-                "speed": self.speed, "hit": self.hit}
+        info = {'pos': (self.x, self.y, self.z), 'cte': self.cte, 'speed': self.speed, 'hit': self.hit}
 
         self.timer.on_frame()
 

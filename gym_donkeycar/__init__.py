@@ -28,3 +28,18 @@ register(
     id='donkey-generated-track-v0',
     entry_point='gym_donkeycar.envs.donkey_env:GeneratedTrackEnv',
 )
+
+register(
+    id='donkey-ironcar-track-v0',
+    entry_point='gym_donkeycar.envs.donkey_env:IroncarTrackEnv',
+)
+
+register(
+    id='donkey-chicane-track-v0',
+    entry_point='gym_donkeycar.envs.donkey_env:ChicaneTrackEnv',
+)
+
+register(
+    id='donkey-circle-track-v0',
+    entry_point='gym_donkeycar.envs.donkey_env:CircleTrackEnv',
+)

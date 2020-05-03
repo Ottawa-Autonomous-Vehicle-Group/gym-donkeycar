@@ -33,7 +33,7 @@ class DonkeyEnv(gym.Env):
 
     def __init__(self, level=0, exe_path="self_start", host='127.0.0.1', port=9091, frame_skip=2, start_delay=5.0):
 
-        print("starting DonkeyGym env")
+        print("starting DonkeyGym env, level: ", level)
 
         # start Unity simulation subprocess
         self.proc = DonkeyUnityProcess()
@@ -125,3 +125,19 @@ class GeneratedTrackEnv(DonkeyEnv):
 
     def __init__(self, *args, **kwargs):
         super(GeneratedTrackEnv, self).__init__(level=3, *args, **kwargs)
+
+
+class IroncarTrackEnv(DonkeyEnv):
+
+    def __init__(self, *args, **kwargs):
+        super(IroncarTrackEnv, self).__init__(level=4, *args, **kwargs)
+
+class ChicaneTrackEnv(DonkeyEnv):
+
+    def __init__(self, *args, **kwargs):
+        super(ChicaneTrackEnv, self).__init__(level=5, *args, **kwargs)
+
+class CircleTrackEnv(DonkeyEnv):
+
+    def __init__(self, *args, **kwargs):
+        super(CircleTrackEnv, self).__init__(level=6, *args, **kwargs)
