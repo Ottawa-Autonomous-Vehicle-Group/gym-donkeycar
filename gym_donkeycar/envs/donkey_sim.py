@@ -40,6 +40,9 @@ class DonkeyUnitySimContoller():
     def set_car_config(self, body_style, body_rgb, car_name, font_size):
         self.handler.send_car_config(body_style, body_rgb, car_name, font_size)
 
+    def set_cam_config(self, **kwargs):
+        self.handler.send_cam_config(**kwargs)
+
     def wait_until_loaded(self):
         while not self.handler.loaded:
             logger.warning("waiting for sim to start..")
@@ -93,6 +96,7 @@ class DonkeyUnitySimHandler(IMesgHandler):
                     "scene_selection_ready": self.on_scene_selection_ready,
                     "scene_names": self.on_recv_scene_names,
                     "car_loaded": self.on_car_loaded,
+                    "ping": self.on_ping,
                     "aborted": self.on_abort}
 
     def on_connect(self, client):
@@ -101,7 +105,7 @@ class DonkeyUnitySimHandler(IMesgHandler):
     def on_disconnect(self):
         self.client = None
 
-    def on_abort(self):
+    def on_abort(self, message):
         self.client.stop()
 
     def on_recv_message(self, message):
@@ -119,6 +123,9 @@ class DonkeyUnitySimHandler(IMesgHandler):
 
     def reset(self):
         logger.debug("reseting")
+        self.send_reset_car()
+        self.timer.reset()
+        time.sleep(1)
         self.image_array = np.zeros(self.camera_img_size)
         self.last_obs = self.image_array
         self.hit = "none"
@@ -128,9 +135,7 @@ class DonkeyUnitySimHandler(IMesgHandler):
         self.z = 0.0
         self.speed = 0.0
         self.over = False
-        self.send_reset_car()
-        self.timer.reset()
-        time.sleep(1)
+
 
     def get_sensor_size(self):
         return self.camera_img_size
@@ -199,6 +204,12 @@ class DonkeyUnitySimHandler(IMesgHandler):
 
         self.determine_episode_over()
 
+    def on_ping(self, message):
+        '''
+        no reply needed at this point. Server sends these as a keep alive to make sure clients haven't gone away.
+        '''
+        pass
+
     def determine_episode_over(self):
         # we have a few initial frames on start that are sometimes very large CTE when it's behind
         # the path just slightly. We ignore those.
@@ -256,6 +267,32 @@ class DonkeyUnitySimHandler(IMesgHandler):
             'car_name': car_name,
             'font_size' : font_size.__str__() }
         self.queue_message(msg)
+        time.sleep(0.1)
+
+    def send_cam_config(self, img_w=0, img_h=0, img_d=0, img_enc=0, fov=0, fish_eye_x=0, fish_eye_y=0, offset_x=0, offset_y=0, offset_z=0, rot_x=0):
+        """ Camera config
+            set any field to Zero to get the default camera setting.
+            offset_x moves camera left/right
+            offset_y moves camera up/down
+            offset_z moves camera forward/back
+            rot_x will rotate the camera
+            with fish_eye_x/y == 0.0 then you get no distortion
+            img_enc can be one of JPG|PNG|TGA
+        """
+        msg = {"msg_type" : "cam_config",
+               "fov" : str(fov),
+               "fish_eye_x" : str(fish_eye_x),
+               "fish_eye_y" : str(fish_eye_y),
+               "img_w" : str(img_w),
+               "img_h" : str(img_h),
+               "img_d" : str(img_d),
+               "img_enc" : str(img_enc),
+               "offset_x" : str(offset_x),
+               "offset_y" : str(offset_y),
+               "offset_z" : str(offset_z),
+               "rot_x" : str(rot_x) }
+        self.queue_message(msg)
+        time.sleep(0.1)
 
     def queue_message(self, msg):
         if self.client is None:
