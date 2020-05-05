@@ -8,6 +8,14 @@ __version__ = '1.0.14'
 
 from gym.envs.registration import register
 from .envs.donkey_env import GeneratedRoadsEnv, WarehouseEnv, AvcSparkfunEnv, GeneratedTrackEnv
+from .envs.vae_env import DonkeyVAEEnv
+
+register(
+    id='DonkeyVae-v0',
+    entry_point='gym_donkeycar.envs.vae_env:DonkeyVAEEnv',
+    max_episode_steps=None,
+)
+
 
 register(
     id='donkey-generated-roads-v0',
