@@ -130,18 +130,27 @@ class GeneratedTrackEnv(DonkeyEnv):
     def __init__(self, *args, **kwargs):
         super(GeneratedTrackEnv, self).__init__(level=3, *args, **kwargs)
 
+        
+class MountainTrackEnv(DonkeyEnv):
 
+    def __init__(self, *args, **kwargs):
+        super(MountainTrackEnv, self).__init__(level=4, *args, **kwargs)
+
+        
 class IroncarTrackEnv(DonkeyEnv):
 
     def __init__(self, *args, **kwargs):
         super(IroncarTrackEnv, self).__init__(level=4, *args, **kwargs)
 
+        
 class ChicaneTrackEnv(DonkeyEnv):
 
     def __init__(self, *args, **kwargs):
         super(ChicaneTrackEnv, self).__init__(level=5, *args, **kwargs)
 
+        
 class CircleTrackEnv(DonkeyEnv):
 
     def __init__(self, *args, **kwargs):
         super(CircleTrackEnv, self).__init__(level=6, *args, **kwargs)
+
